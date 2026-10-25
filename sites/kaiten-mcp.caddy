@@ -1,0 +1,7 @@
+# MCP-коннектор Kaiten, репо aimuzov/kaiten-mcp, на сервере в /srv/kaiten-mcp.
+
+kaiten-mcp.aimuzov.online {
+	import common
+
+	reverse_proxy kaiten-mcp:8080
+}
