@@ -6,7 +6,7 @@ peeshet.aimuzov.online {
 
 	# лимит совпадает с MAX_BODY в src/api.ts: картинку больше Telegram всё равно не примет
 	request_body {
-		max_size 10MB
+		max_size 10MiB
 	}
 
 	@public path /api/* /health

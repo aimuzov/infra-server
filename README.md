@@ -45,6 +45,7 @@ flowchart LR
 | [wodlog.aimuzov.online](https://wodlog.aimuzov.online)         | [aimuzov/wodlog](https://github.com/aimuzov/wodlog)                               | `wodlog`, `wodlog-api`                       |
 | [sorebody.aimuzov.online](https://sorebody.aimuzov.online)     | [aimuzov/sorebody](https://github.com/aimuzov/sorebody)                           | `sorebody`, `sorebody-api`                   |
 | [thinks-mcp.aimuzov.online](https://thinks-mcp.aimuzov.online) | [aimuzov/thinks-mcp](https://github.com/aimuzov/thinks-mcp)                       | `thinks-mcp`                                 |
+| [peeshet.aimuzov.online](https://peeshet.aimuzov.online)       | [aimuzov/peeshet](https://github.com/aimuzov/peeshet)                             | `peeshet`, `peeshet-tunnel`                  |
 
 ## Repository layout
 
