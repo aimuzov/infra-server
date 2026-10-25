@@ -46,6 +46,7 @@ flowchart LR
 | [sorebody.aimuzov.online](https://sorebody.aimuzov.online)     | [aimuzov/sorebody](https://github.com/aimuzov/sorebody)                           | `sorebody`, `sorebody-api`                   |
 | [kaiten-mcp.aimuzov.online](https://kaiten-mcp.aimuzov.online) | [aimuzov/kaiten-mcp](https://github.com/aimuzov/kaiten-mcp)                       | `kaiten-mcp`                                 |
 | [thinks-mcp.aimuzov.online](https://thinks-mcp.aimuzov.online) | [aimuzov/thinks-mcp](https://github.com/aimuzov/thinks-mcp)                       | `thinks-mcp`                                 |
+| [peeshet.aimuzov.online](https://peeshet.aimuzov.online)       | [aimuzov/peeshet](https://github.com/aimuzov/peeshet)                             | `peeshet`, `peeshet-tunnel`                  |
 
 ## Repository layout
 

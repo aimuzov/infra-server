@@ -1,0 +1,20 @@
+# Очередь постов канала @aimuzov_peeshet, репо aimuzov/peeshet, на сервере в /srv/peeshet.
+# Наружу только API для локального MCP (под токеном) и /health.
+
+peeshet.aimuzov.online {
+	import common
+
+	# лимит совпадает с MAX_BODY в src/api.ts: картинку больше Telegram всё равно не примет
+	request_body {
+		max_size 10MiB
+	}
+
+	@public path /api/* /health
+	handle @public {
+		reverse_proxy peeshet-tunnel:8080
+	}
+
+	handle {
+		respond 404
+	}
+}
