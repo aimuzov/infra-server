@@ -12,12 +12,13 @@ set -euo pipefail
 {
 	project=${1:-}
 	if [[ ! $project =~ ^[a-z0-9-]+$ || ! -d /srv/$project/.git ]]; then
-		echo "usage: site.sh <project> [vX.Y.Z], a clone in /srv/<project>" >&2
+		echo "usage: site.sh <project> [[component-]vX.Y.Z], a clone in /srv/<project>" >&2
 		exit 2
 	fi
 
 	ref=${2:-${SSH_ORIGINAL_COMMAND:-}}
-	if [[ -n $ref && ! $ref =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+	# В монорепо тег начинается с имени подпроекта: docs-v1.3.0.
+	if [[ -n $ref && ! $ref =~ ^([a-z0-9]+-)?v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 		echo "not a release tag: $ref" >&2
 		exit 2
 	fi

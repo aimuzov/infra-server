@@ -15,7 +15,7 @@ set -euo pipefail
 
 	# Файл пишет site.sh. Проверяем повторно, так как здесь это единственный ввод снаружи.
 	ref=$(cat "/run/site-deploy/$project.ref" 2>/dev/null || true)
-	if [[ -n $ref && ! $ref =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+	if [[ -n $ref && ! $ref =~ ^([a-z0-9]+-)?v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 		echo "not a release tag: $ref" >&2
 		exit 2
 	fi
