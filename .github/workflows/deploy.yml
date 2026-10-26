@@ -25,6 +25,8 @@ jobs:
           -v "$PWD/sites:/etc/caddy/sites:ro"
           caddy:2.10-alpine sh -c
           'TAPLIST_EDITOR_HASH="$(caddy hash-password --plaintext ci)"
+          REABICA_AUTH_USER=ci
+          REABICA_AUTH_HASH="$(caddy hash-password --plaintext ci)"
           caddy validate --config /etc/caddy/Caddyfile'
 
   deploy:

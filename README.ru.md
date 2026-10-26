@@ -112,10 +112,11 @@ command="git -C /srv/infra-server pull --ff-only --quiet && /srv/infra-server/de
 В git секретов нет. Они лежат в `/srv/infra-server/.env` (образец --
 [`.env.example`](.env.example)):
 
-| Переменная             | Кто читает                                                               |
-| ---------------------- | ------------------------------------------------------------------------ |
-| `VPN_SUBSCRIPTION_URL` | `vpn/update.sh` -- подписка, из которой собирается конфиг Xray           |
-| `TAPLIST_EDITOR_HASH`  | `sites/community-taplist.caddy` -- bcrypt-хеш для `basic_auth` редактора |
+| Переменная                               | Кто читает                                                                           |
+| ---------------------------------------- | ------------------------------------------------------------------------------------ |
+| `VPN_SUBSCRIPTION_URL`                   | `vpn/update.sh` -- подписка, из которой собирается конфиг Xray                       |
+| `TAPLIST_EDITOR_HASH`                    | `sites/community-taplist.caddy` -- bcrypt-хеш для `basic_auth` редактора             |
+| `REABICA_AUTH_USER`, `REABICA_AUTH_HASH` | `sites/reabica.caddy` -- логин и bcrypt-хеш для `basic_auth`, закрывающего весь сайт |
 
 Свой секрет сайту: сослаться на него как `{$NAME}` в `sites/<project>.caddy` и передать сервису
 `caddy` в `compose.yml` поштучно, чтобы остальной `.env` в Caddy не попадал:
