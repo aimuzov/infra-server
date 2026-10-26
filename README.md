@@ -114,10 +114,11 @@ Its private half is the `DEPLOY_SSH_KEY` repository secret.
 Nothing secret is committed. Secrets live in `/srv/infra-server/.env` (template:
 [`.env.example`](.env.example)):
 
-| Variable               | Used by                                                                     |
-| ---------------------- | --------------------------------------------------------------------------- |
-| `VPN_SUBSCRIPTION_URL` | `vpn/update.sh` — subscription the Xray config is built from                |
-| `TAPLIST_EDITOR_HASH`  | `sites/community-taplist.caddy` — bcrypt hash for the editor's `basic_auth` |
+| Variable                                 | Used by                                                                                       |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `VPN_SUBSCRIPTION_URL`                   | `vpn/update.sh` — subscription the Xray config is built from                                  |
+| `TAPLIST_EDITOR_HASH`                    | `sites/community-taplist.caddy` — bcrypt hash for the editor's `basic_auth`                   |
+| `REABICA_AUTH_USER`, `REABICA_AUTH_HASH` | `sites/reabica.caddy` — login and bcrypt hash for the `basic_auth` that closes the whole site |
 
 To give a site its own secret, reference it as `{$NAME}` in `sites/<project>.caddy` and pass it to
 the `caddy` service in `compose.yml` one by one, so the rest of `.env` stays out of Caddy:
