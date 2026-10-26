@@ -1,5 +1,11 @@
 # Требования к CRM Reabica, репо aimuzov/reabica, на сервере /srv/reabica.
 
+# Лендинга пока нет, корень ведёт на требования. Редирект временный, чтобы браузеры
+# не запомнили его, когда на корне появится свой сайт.
+reabica.ru {
+	redir https://docs.reabica.ru{uri}
+}
+
 docs.reabica.ru {
 	import common
 
