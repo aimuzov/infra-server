@@ -11,7 +11,8 @@ docs.reabica.ru {
 
 	# Сайт закрыт целиком. Без пароля открыты только robots.txt и /api/health: по ним
 	# деплой проверяет выкладку. Логин и хеш берутся из .env на сервере (см. compose.yml).
-	@private not path /robots.txt /api/health
+	# /api/admin/* -- ручки CLI комментариев, их закрывает свой токен в самом API.
+	@private not path /robots.txt /api/health /api/admin/*
 	basic_auth @private {
 		{$REABICA_AUTH_USER} {$REABICA_AUTH_HASH}
 	}
