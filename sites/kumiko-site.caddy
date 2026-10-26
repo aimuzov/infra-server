@@ -1,0 +1,6 @@
+# kumiko, репо aimuzov/kumiko-site, на сервере /srv/kumiko-site.
+
+kumiko.aimuzov.online {
+	import common
+	reverse_proxy kumiko-site:80
+}
