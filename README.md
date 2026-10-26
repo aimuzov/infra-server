@@ -81,7 +81,8 @@ docker/docker-prune.{service,timer}   weekly cleanup of the Docker build cache
   container name.
 - A project never writes outside its folder.
 - Sites deploy with one script, [`deploy/site.sh`](deploy/site.sh), the key of a site runs it with
-  the project name and the release tag Actions sends as the ssh command (without one, the newest
+  the project name and the release tag Actions sends as the ssh command, `v1.2.0` or, in a monorepo,
+  `docs-v1.2.0` (without one, the newest
   `main`). The build runs in the systemd unit `site-deploy@<project>`, so a dropped SSH
   connection doesn't stop it, and `site.sh` streams its log to Actions. The lock
   `/tmp/sites-deploy.lock` lets the server build one site at a time, so a merge into several repos
