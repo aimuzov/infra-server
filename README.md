@@ -9,7 +9,7 @@
 
 <p align="center">
 	<a href="https://github.com/aimuzov/infra-server/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimuzov/infra-server/deploy.yml?branch=main&label=deploy" alt="Deploy"></a>
-	<a href="https://caddyserver.com"><img src="https://img.shields.io/badge/Caddy-2.10-1f88c0?logo=caddy&logoColor=white" alt="Caddy"></a>
+	<a href="https://caddyserver.com"><img src="https://img.shields.io/badge/Caddy-2.11-1f88c0?logo=caddy&logoColor=white" alt="Caddy"></a>
 	<a href="https://github.com/XTLS/Xray-core"><img src="https://img.shields.io/badge/Xray-26.9-555" alt="Xray"></a>
 	<a href="https://docs.docker.com/compose/"><img src="https://img.shields.io/badge/Docker-Compose-2496ed?logo=docker&logoColor=white" alt="Docker Compose"></a>
 	<a href="LICENSE"><img src="https://img.shields.io/github/license/aimuzov/infra-server" alt="License"></a>
@@ -132,7 +132,7 @@ environment:
 Values containing `$` (bcrypt hashes) go in single quotes. A password hash is made with:
 
 ```bash
-docker run --rm -it caddy:2.10-alpine caddy hash-password
+docker run --rm -it caddy:2.11-alpine caddy hash-password
 ```
 
 ## Adding a project

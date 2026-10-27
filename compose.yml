@@ -6,7 +6,7 @@ name: infra
 
 services:
   caddy:
-    image: caddy:2.10-alpine
+    image: caddy:2.11-alpine
     container_name: caddy
     restart: unless-stopped
     # Хеши паролей для sites/*.caddy ({$VAR}). Передаём поштучно, чтобы остальной .env
