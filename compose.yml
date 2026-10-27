@@ -36,7 +36,7 @@ services:
   # Выход в интернет через VPN для проектов: HTTP-прокси vpn:3128 и SOCKS vpn:1080 в сети vpn.
   # Конфиг собирает vpn/update.sh из подписки, сам файл в git не попадает.
   vpn:
-    image: ghcr.io/xtls/xray-core:26.9.9
+    image: ghcr.io/xtls/xray-core:26.10.21
     container_name: vpn
     restart: unless-stopped
     command: ['run', '-c', '/etc/xray/config.json']
