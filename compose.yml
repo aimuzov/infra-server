@@ -14,6 +14,8 @@ services:
     # а не поднимается редактор без пароля.
     environment:
       TAPLIST_EDITOR_HASH: ${TAPLIST_EDITOR_HASH:?TAPLIST_EDITOR_HASH is not set, see .env.example}
+      REABICA_AUTH_USER: ${REABICA_AUTH_USER:?REABICA_AUTH_USER is not set, see .env.example}
+      REABICA_AUTH_HASH: ${REABICA_AUTH_HASH:?REABICA_AUTH_HASH is not set, see .env.example}
     ports:
       - '80:80'
       - '443:443'

@@ -1,0 +1,45 @@
+# Справочник травм Sorebody, репо aimuzov/sorebody, на сервере /srv/sorebody.
+# Старый домен wodcare.aimuzov.online убран вместе с A-записью.
+
+sorebody.aimuzov.online {
+	import common
+
+	# Вебвизор и карта кликов Метрики открывают сайт в iframe на своих доменах, поэтому вместо
+	# SAMEORIGIN из common -- список из справки Метрики (install-counter-csp). Без defer
+	# заголовок из common вернётся после удаления.
+	header {
+		-X-Frame-Options
+		Content-Security-Policy "frame-ancestors 'self' metrika.yandex.ru analytics.yandex.by analytics.yandex.com analytics.yandex.com.tr analytics.yandex.kz analytics.yandex.ru metr.yandex.by metr.yandex.com metr.yandex.com.tr metr.yandex.kz metr.yandex.ru metrica.ya.ru metrica.yandex metrica.yandex.by metrica.yandex.com metrica.yandex.com.tr metrica.yandex.kz metrica.yandex.ru metrika.ya.ru metrika.yandex metrika.yandex.by metrika.yandex.com metrika.yandex.com.tr metrika.yandex.kz metrika.yandex.uz"
+		defer
+	}
+
+	# Публичный MCP справочника (src/backend в репо сайта). Запрос к нему -- килобайт-другой,
+	# больше 64 КБ -- Caddy отвечает 413, не дочитывая.
+	request_body /mcp {
+		max_size 64KB
+	}
+
+	handle /mcp {
+		reverse_proxy sorebody-api:8787
+	}
+
+	# Чат со справочником, тот же бэкенд. Реплика -- до 1 000 символов, тело с запасом 8 КБ.
+	# Ответ идёт потоком SSE: text/event-stream Caddy отдаёт без буфера и не сжимает
+	# (проверено на 2.10), так что flush_interval не нужен.
+	request_body /api/chat {
+		max_size 8KB
+	}
+
+	handle /api/chat {
+		reverse_proxy sorebody-api:8787
+	}
+
+	# Здоровье бэкенда, по нему деплой сайта проверяет API. Отвечает только `ok`.
+	handle /api/health {
+		reverse_proxy sorebody-api:8787
+	}
+
+	handle {
+		reverse_proxy sorebody:80
+	}
+}

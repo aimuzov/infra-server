@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - run: shellcheck deploy/remote.sh deploy/site.sh deploy/site-build.sh vpn/update.sh
       # Тот же образ, что в compose.yml, чтобы сломанный конфиг не доехал до сервера.
       # Хеш одноразовый: настоящий секрет живёт только в .env на сервере.
@@ -25,6 +25,8 @@ jobs:
           -v "$PWD/sites:/etc/caddy/sites:ro"
           caddy:2.11-alpine sh -c
           'TAPLIST_EDITOR_HASH="$(caddy hash-password --plaintext ci)"
+          REABICA_AUTH_USER=ci
+          REABICA_AUTH_HASH="$(caddy hash-password --plaintext ci)"
           caddy validate --config /etc/caddy/Caddyfile'
 
   deploy:

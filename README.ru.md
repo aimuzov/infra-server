@@ -1,20 +1,22 @@
-<div align="center">
+<p align="center">
+	<a href="README.md"><img src="https://img.shields.io/badge/English-555?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+PGNsaXBQYXRoIGlkPSJ0Ij48cGF0aCBkPSJNMzAsMTVoMzB2MTV6djE1aC0zMHpoLTMwdi0xNXp2LTE1aDMweiIvPjwvY2xpcFBhdGg+PHBhdGggZD0iTTAsMHYzMGg2MHYtMzB6IiBmaWxsPSIjMDEyMTY5Ii8+PHBhdGggZD0iTTAsMCA2MCwzME02MCwwIDAsMzAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHBhdGggZD0iTTAsMCA2MCwzME02MCwwIDAsMzAiIGNsaXAtcGF0aD0idXJsKCN0KSIgc3Ryb2tlPSIjQzgxMDJFIiBzdHJva2Utd2lkdGg9IjQiLz48cGF0aCBkPSJNMzAsMHYzME0wLDE1aDYwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMTAiLz48cGF0aCBkPSJNMzAsMHYzME0wLDE1aDYwIiBzdHJva2U9IiNDODEwMkUiIHN0cm9rZS13aWR0aD0iNiIvPjwvc3ZnPg==" alt="English"></a>
+	<img src="https://img.shields.io/badge/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-f97316?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5IDYiPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoOXYzSDB6Ii8+PHBhdGggZmlsbD0iIzAwMzlhNiIgZD0iTTAgMmg5djJIMHoiLz48cGF0aCBmaWxsPSIjZDUyYjFlIiBkPSJNMCA0aDl2MkgweiIvPjwvc3ZnPg==" alt="Русский">
+</p>
 
-# infra-server
+<p align="center">
+	<img src=".github/assets/banner.jpg" alt="infra-server: общий Caddy и VPN-выход" width="100%">
+</p>
 
-Общий Caddy и VPN-выход для небольшого сервера с проектами.
+<p align="center">
+	<a href="https://github.com/aimuzov/infra-server/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/aimuzov/infra-server/deploy.yml?branch=main&label=deploy" alt="Deploy"></a>
+	<a href="https://caddyserver.com"><img src="https://img.shields.io/badge/Caddy-2.11-1f88c0?logo=caddy&logoColor=white" alt="Caddy"></a>
+	<a href="https://github.com/XTLS/Xray-core"><img src="https://img.shields.io/badge/Xray-26.9-555" alt="Xray"></a>
+	<a href="https://docs.docker.com/compose/"><img src="https://img.shields.io/badge/Docker-Compose-2496ed?logo=docker&logoColor=white" alt="Docker Compose"></a>
+	<a href="LICENSE"><img src="https://img.shields.io/github/license/aimuzov/infra-server" alt="License"></a>
+</p>
 
-[![Deploy](https://github.com/aimuzov-projects/infra-server/actions/workflows/deploy.yml/badge.svg)](https://github.com/aimuzov-projects/infra-server/actions/workflows/deploy.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Caddy 2.11](https://img.shields.io/badge/Caddy-2.11-1f88c0?logo=caddy&logoColor=white)
-![Xray](https://img.shields.io/badge/Xray-26.9-555)
-![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ed?logo=docker&logoColor=white)
-
-[English](README.md) · **Русский**
-
-</div>
-
----
+<h3 align="center">Общий Caddy и VPN-выход для небольшого сервера с проектами</h3>
+<p align="center">Один Caddy на 80/443, у каждого проекта своя папка и свой compose-проект, деплой из GitHub Actions по SSH</p>
 
 Один Caddy держит 80/443, выпускает сертификаты и раскидывает домены по контейнерам проектов.
 Проекты не публикуют порты и не знают друг о друге: какой домен куда идёт, знает только
@@ -32,14 +34,18 @@ flowchart LR
 
 ## Сайты
 
-| Домен | Проект | Контейнеры |
-| --- | --- | --- |
-| [tatiana-shkatova.ru](https://tatiana-shkatova.ru) | [aimuzov-projects/shkatova-psychologist](https://github.com/aimuzov-projects/shkatova-psychologist) | `shkatova-psychologist`, `shkatova-chat` |
-| [taplist.aimuzov.online](https://taplist.aimuzov.online) | [aimuzov-projects/community-taplist](https://github.com/aimuzov-projects/community-taplist) | `community-taplist`, `community-taplist-api` |
-| [codenames.aimuzov.online](https://codenames.aimuzov.online) | [aimuzov-projects/codenames](https://github.com/aimuzov-projects/codenames) | `codenames`, `codenames-relay` |
-| [logist.aimuzov.online](https://logist.aimuzov.online) | [aimuzov-projects/prestige-logist](https://github.com/aimuzov-projects/prestige-logist) | `prestige-logist`, `prestige-logist-api` |
-| [sublya.aimuzov.online](https://sublya.aimuzov.online) | [aimuzov-projects/sublya](https://github.com/aimuzov-projects/sublya) | `sublya-site`, `sublya-tunnel` |
-| [lazyvimx.aimuzov.online](https://lazyvimx.aimuzov.online) | [lazyvimx/site](https://github.com/lazyvimx/site) | `lazyvimx-site` |
+| Домен                                                          | Проект                                                                            | Контейнеры                                   |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------- |
+| [tatiana-shkatova.ru](https://tatiana-shkatova.ru)             | [aimuzov/shkatova-psychologist](https://github.com/aimuzov/shkatova-psychologist) | `shkatova-psychologist`, `shkatova-chat`     |
+| [taplist.aimuzov.online](https://taplist.aimuzov.online)       | [aimuzov/community-taplist](https://github.com/aimuzov/community-taplist)         | `community-taplist`, `community-taplist-api` |
+| [codenames.aimuzov.online](https://codenames.aimuzov.online)   | [aimuzov/codenames](https://github.com/aimuzov/codenames)                         | `codenames`, `codenames-relay`               |
+| [logist.aimuzov.online](https://logist.aimuzov.online)         | [aimuzov/prestige-logist](https://github.com/aimuzov/prestige-logist)             | `prestige-logist`, `prestige-logist-api`     |
+| [sublya.aimuzov.online](https://sublya.aimuzov.online)         | [aimuzov/sublya](https://github.com/aimuzov/sublya)                               | `sublya-site`, `sublya-tunnel`               |
+| [lazyvimx.aimuzov.online](https://lazyvimx.aimuzov.online)     | [lazyvimx/site](https://github.com/lazyvimx/site)                                 | `lazyvimx-site`                              |
+| [wodlog.aimuzov.online](https://wodlog.aimuzov.online)         | [aimuzov/wodlog](https://github.com/aimuzov/wodlog)                               | `wodlog`, `wodlog-api`                       |
+| [sorebody.aimuzov.online](https://sorebody.aimuzov.online)     | [aimuzov/sorebody](https://github.com/aimuzov/sorebody)                           | `sorebody`, `sorebody-api`                   |
+| [kaiten-mcp.aimuzov.online](https://kaiten-mcp.aimuzov.online) | [aimuzov/kaiten-mcp](https://github.com/aimuzov/kaiten-mcp)                       | `kaiten-mcp`                                 |
+| [thinks-mcp.aimuzov.online](https://thinks-mcp.aimuzov.online) | [aimuzov/thinks-mcp](https://github.com/aimuzov/thinks-mcp)                       | `thinks-mcp`                                 |
 
 ## Что где лежит
 
@@ -50,6 +56,7 @@ compose.yml               сервисы caddy и vpn
 deploy/remote.sh          выкладка, выполняется на сервере
 deploy/site.sh            выкладка любого сайта: запускает site-deploy@<project> и показывает его лог
 deploy/site-build.sh      сама сборка, внутри site-deploy@.service
+deploy/site-deploy@.service   systemd-юнит сборки сайта, переживает обрыв SSH
 ssh/10-no-passwords.conf  sshd: только ключи, без паролей; ставится при каждой выкладке
 vpn/update.sh             собирает конфиг Xray из подписки
 vpn/vpn-update.{service,timer}   обновление конфига раз в сутки
@@ -71,8 +78,10 @@ docker/docker-prune.{service,timer}   чистка кэша сборки Docker 
   тома и сети получают префикс проекта, поэтому проекты не пересекаются.
 - Проекты не публикуют порты на хост. Они подключаются к внешней сети `edge`, Caddy ходит к ним
   по имени контейнера.
+- Проект не пишет за пределы своей папки.
 - Сайты выкладываются одним скриптом, [`deploy/site.sh`](deploy/site.sh), ключ сайта запускает его
-  с именем проекта и тегом релиза, который Actions передаёт командой ssh (без тега -- свежий `main`).
+  с именем проекта и тегом релиза, который Actions передаёт командой ssh: `v1.2.0` или в монорепо
+  `docs-v1.2.0` (без тега -- свежий `main`).
   Сборка идёт в systemd-юните `site-deploy@<project>`, поэтому обрыв SSH её не
   останавливает, а `site.sh` транслирует её лог в Actions. Lock `/tmp/sites-deploy.lock` даёт серверу
   собирать по одному сайту, поэтому мерж сразу в несколько репо не собирает их параллельно на
@@ -104,10 +113,11 @@ command="git -C /srv/infra-server pull --ff-only --quiet && /srv/infra-server/de
 В git секретов нет. Они лежат в `/srv/infra-server/.env` (образец --
 [`.env.example`](.env.example)):
 
-| Переменная | Кто читает |
-| --- | --- |
-| `VPN_SUBSCRIPTION_URL` | `vpn/update.sh` -- подписка, из которой собирается конфиг Xray |
-| `TAPLIST_EDITOR_HASH` | `sites/community-taplist.caddy` -- bcrypt-хеш для `basic_auth` редактора |
+| Переменная                               | Кто читает                                                                           |
+| ---------------------------------------- | ------------------------------------------------------------------------------------ |
+| `VPN_SUBSCRIPTION_URL`                   | `vpn/update.sh` -- подписка, из которой собирается конфиг Xray                       |
+| `TAPLIST_EDITOR_HASH`                    | `sites/community-taplist.caddy` -- bcrypt-хеш для `basic_auth` редактора             |
+| `REABICA_AUTH_USER`, `REABICA_AUTH_HASH` | `sites/reabica.caddy` -- логин и bcrypt-хеш для `basic_auth`, закрывающего весь сайт |
 
 Свой секрет сайту: сослаться на него как `{$NAME}` в `sites/<project>.caddy` и передать сервису
 `caddy` в `compose.yml` поштучно, чтобы остальной `.env` в Caddy не попадал:
@@ -141,21 +151,28 @@ docker run --rm -it caddy:2.11-alpine caddy hash-password
    gh repo deploy-key add key.pub -R <org>/<repo> --title projects-server
    ```
 
-3. Клонировать и поднять проект:
+3. Клонировать проект:
 
    ```bash
    ssh projects git clone github-<project>:<org>/<repo>.git /srv/<project>
    ```
 
+   Если в репо есть `.env.example`, заполнить по нему `/srv/<project>/.env`: без этого файла
+   сборка остановится до compose.
+
 4. Для сайта -- пустить выкладку из его GitHub Actions: публичную половину нового ключа дописать в
-   `/root/.ssh/authorized_keys`, приватную положить в секрет репо `DEPLOY_SSH_KEY`:
+   `/root/.ssh/authorized_keys`, приватную положить в секрет репо `DEPLOY_SSH_KEY`, затем
+   выставить переменной репо `DEPLOY_ENABLED` значение `true`: без неё сайты из
+   infra-site-template пропускают джобу деплоя:
 
    ```
    command="/srv/infra-server/deploy/site.sh <project>",restrict ssh-ed25519 ... github-actions@<project>
    ```
 
 5. Добавить `sites/<project>.caddy` с `import common` и `reverse_proxy <container_name>:<port>`,
-   направить DNS домена на сервер и запушить `main`.
+   направить DNS домена на сервер и запушить `main`. `common` ставит заголовки безопасности,
+   собственный `Permissions-Policy` сайта важнее, см. [`codenames.caddy`](sites/codenames.caddy).
+6. Первая сборка: запустить Release сайта вручную или `ssh projects /srv/infra-server/deploy/site.sh <project>`.
 
 ## VPN-выход
 
@@ -171,7 +188,7 @@ services:
   app:
     environment:
       HTTPS_PROXY: http://vpn:3128
-      NODE_USE_ENV_PROXY: '1' # только для Node 24+: без этого fetch прокси не видит
+      NODE_USE_ENV_PROXY: "1" # только для Node 24+: без этого fetch прокси не видит
     networks:
       - vpn
 
@@ -194,7 +211,7 @@ docker run --rm --network vpn curlimages/curl -sx http://vpn:3128 https://www.cl
 2. Файрвол: `ufw allow 22/tcp`, `ufw allow 80/tcp`, `ufw allow 443` (TCP и UDP для HTTP/3).
 3. Сети: `docker network create edge` и `docker network create vpn`.
 4. Deploy key для этого репо (см. [Новый проект](#новый-проект)), затем
-   `git clone github-infra-server:aimuzov-projects/infra-server.git /srv/infra-server`.
+   `git clone github-infra-server:aimuzov/infra-server.git /srv/infra-server`.
 5. `/srv/infra-server/.env` по образцу [`.env.example`](.env.example), затем один раз
    `deploy/remote.sh`.
 6. Оболочка: root получает fish из [dotfiles](https://github.com/aimuzov/dotfiles/blob/main/docs/fish/README.ru.md#linux-сервер),

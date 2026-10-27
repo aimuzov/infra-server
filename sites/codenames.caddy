@@ -1,4 +1,4 @@
-# Игра Codenames, репо aimuzov-projects/codenames, на сервере в /srv/codenames.
+# Игра Codenames, репо aimuzov/codenames, на сервере в /srv/codenames.
 
 codenames.aimuzov.online {
 	import common
@@ -9,6 +9,12 @@ codenames.aimuzov.online {
 
 	# Онлайн-комнаты ходят через WebSocket, upgrade reverse_proxy пробрасывает сам.
 	handle /ws* {
+		reverse_proxy codenames-relay:8787
+	}
+
+	# Релей отвечает 200 на любой HTTP-запрос,
+	# по этому адресу деплой проверяет, что он поднялся.
+	handle /api/health {
 		reverse_proxy codenames-relay:8787
 	}
 

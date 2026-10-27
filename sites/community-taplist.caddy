@@ -1,4 +1,4 @@
-# Таплист бара, репо aimuzov-projects/community-taplist, на сервере в /srv/community-taplist.
+# Таплист бара, репо aimuzov/community-taplist, на сервере в /srv/community-taplist.
 
 taplist.aimuzov.online {
 	import common

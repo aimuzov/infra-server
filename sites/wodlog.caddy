@@ -1,0 +1,28 @@
+# WODlog: Telegram Mini App из репо aimuzov/wodlog (/srv/wodlog),
+# фронт и API на одном домене.
+
+wodlog.aimuzov.online {
+	import common
+
+	# Telegram Web открывает Mini App в своём iframe, поэтому вместо SAMEORIGIN из common
+	# здесь список разрешённых origin'ов. Без defer заголовок из common вернётся
+	# после удаления.
+	header {
+		-X-Frame-Options
+		Content-Security-Policy "frame-ancestors https://web.telegram.org https://*.telegram.org"
+		defer
+	}
+
+	# Фото доски уходит в API целиком, до 12 МБ. Больше -- Caddy отвечает 413.
+	request_body /api/* {
+		max_size 12MB
+	}
+
+	handle /api/* {
+		reverse_proxy wodlog-api:8787
+	}
+
+	handle {
+		reverse_proxy wodlog:80
+	}
+}

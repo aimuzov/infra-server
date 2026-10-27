@@ -1,0 +1,13 @@
+# MCP-коннектор thinks, репо aimuzov/thinks-mcp, на сервере в /srv/thinks-mcp.
+
+thinks-mcp.aimuzov.online {
+	import common
+
+	# Выгрузка Telegram загружается целиком одним PUT, это сотни мегабайт. Лимит должен
+	# совпадать с THINKS_MAX_UPLOAD_MB в .env проекта, иначе 413 отдаст уже Caddy.
+	request_body /account/upload {
+		max_size 1GB
+	}
+
+	reverse_proxy thinks-mcp:8080
+}
