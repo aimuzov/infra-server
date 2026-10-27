@@ -6,7 +6,7 @@ Shared Caddy front door and VPN egress for a small self-hosted projects server.
 
 [![Deploy](https://github.com/aimuzov-projects/infra-server/actions/workflows/deploy.yml/badge.svg)](https://github.com/aimuzov-projects/infra-server/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Caddy 2.10](https://img.shields.io/badge/Caddy-2.10-1f88c0?logo=caddy&logoColor=white)
+![Caddy 2.11](https://img.shields.io/badge/Caddy-2.11-1f88c0?logo=caddy&logoColor=white)
 ![Xray](https://img.shields.io/badge/Xray-26.9-555)
 ![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ed?logo=docker&logoColor=white)
 
@@ -122,7 +122,7 @@ environment:
 Values containing `$` (bcrypt hashes) go in single quotes. A password hash is made with:
 
 ```bash
-docker run --rm -it caddy:2.10-alpine caddy hash-password
+docker run --rm -it caddy:2.11-alpine caddy hash-password
 ```
 
 ## Adding a project
