@@ -79,7 +79,7 @@ docker/docker-prune.{service,timer}   weekly cleanup of the Docker build cache
   Containers, volumes and networks get the project prefix, so projects never collide.
 - Projects publish no host ports. They join the external `edge` network and Caddy reaches them by
   container name. The one exception is the codenames voice chat TURN (`codenames-turn`,
-  `network_mode: host`) on 3478 TCP/UDP and UDP 49160-49200, which Caddy can't proxy.
+  `network_mode: host`) on 3478 TCP/UDP and UDP 49160-49999, which Caddy can't proxy.
 - A project never writes outside its folder.
 - Sites deploy with one script, [`deploy/site.sh`](deploy/site.sh), the key of a site runs it with
   the project name and the release tag Actions sends as the ssh command, `v1.2.0` or, in a monorepo,
@@ -212,7 +212,7 @@ docker run --rm --network vpn curlimages/curl -sx http://vpn:3128 https://www.cl
 
 1. Docker Engine from the docker.com apt repository, plus `apt install jq`.
 2. Firewall: `ufw allow 22/tcp`, `ufw allow 80/tcp`, `ufw allow 443` (TCP and UDP for HTTP/3),
-   plus `ufw allow 3478` and `ufw allow 49160:49200/udp` for the codenames TURN.
+   plus `ufw allow 3478` and `ufw allow 49160:49999/udp` for the codenames TURN.
 3. Networks: `docker network create edge` and `docker network create vpn`.
 4. Deploy key for this repo (see [Adding a project](#adding-a-project)), then
    `git clone github-infra-server:aimuzov/infra-server.git /srv/infra-server`.
