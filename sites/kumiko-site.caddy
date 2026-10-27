@@ -2,5 +2,6 @@
 
 kumiko.aimuzov.online {
 	import common
+	import locale-redirect ru en
 	reverse_proxy kumiko-site:80
 }

@@ -17,4 +17,31 @@
 	}
 }
 
+# Сайт на двух языках: язык по умолчанию {args[0]} в корне, второй {args[1]} под /{args[1]}/.
+# Кто не выбирал язык в переключателе (cookie lang) и не читает на {args[0]}, уходит на ту же
+# страницу под /{args[1]}/. Без Accept-Language (боты) остаётся в корне, а прямую ссылку на
+# /{args[1]}/ не трогаем. Правило одно с locale-boot из infra-site-kit, фолбеком на клиенте.
+(locale-redirect) {
+	@locale-page {
+		not path /{args[1]} /{args[1]}/*
+		not path_regexp \.[A-Za-z0-9]+$
+	}
+
+	# Ответ на тот же адрес зависит от языка и cookie, кешам об этом надо знать.
+	header @locale-page +Vary "Accept-Language, Cookie"
+
+	@locale-redirect {
+		method GET HEAD
+		not path /{args[1]} /{args[1]}/*
+		not path_regexp \.[A-Za-z0-9]+$
+		not header_regexp Cookie (?:^|;\s*)lang=
+		header Accept-Language *
+		# q=0 значит "этот язык не надо", такой {args[0]} не в счёт.
+		not header_regexp Accept-Language (?i)(?:^|,)\s*{args[0]}(?:-[a-z0-9-]*)?\s*(?:,|$|;\s*q\s*=\s*(?:1(?:\.0*)?|0\.\d*[1-9])\s*(?:,|$))
+	}
+
+	# 302: тот же адрес завтра может уйти в другой язык, навсегда его не запоминаем.
+	redir @locale-redirect /{args[1]}{uri} 302
+}
+
 import sites/*.caddy
