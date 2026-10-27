@@ -3,9 +3,9 @@
 codenames.aimuzov.online {
 	import common
 
-	# QR-сканеру в игре нужна камера, а общий сниппет её запрещает. Собственный заголовок
-	# сайта сниппет не перетирает (см. "?" в Caddyfile).
-	header Permissions-Policy "camera=(self), microphone=(), geolocation=(), payment=()"
+	# QR-сканеру в игре нужна камера, а голосовому чату -- микрофон, общий сниппет запрещает
+	# оба. Собственный заголовок сайта сниппет не перетирает (см. "?" в Caddyfile).
+	header Permissions-Policy "camera=(self), microphone=(self), geolocation=(), payment=()"
 
 	# Онлайн-комнаты ходят через WebSocket, upgrade reverse_proxy пробрасывает сам.
 	handle /ws* {

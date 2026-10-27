@@ -77,7 +77,8 @@ docker/docker-prune.{service,timer}   чистка кэша сборки Docker 
 - Один проект -- одна папка `/srv/<project>` и один compose-проект с явным `name:`. Контейнеры,
   тома и сети получают префикс проекта, поэтому проекты не пересекаются.
 - Проекты не публикуют порты на хост. Они подключаются к внешней сети `edge`, Caddy ходит к ним
-  по имени контейнера.
+  по имени контейнера. Исключение одно: TURN голосового чата codenames (`codenames-turn`,
+  `network_mode: host`) слушает 3478 TCP/UDP и UDP 49160-49999, через Caddy такое не проксируется.
 - Проект не пишет за пределы своей папки.
 - Сайты выкладываются одним скриптом, [`deploy/site.sh`](deploy/site.sh), ключ сайта запускает его
   с именем проекта и тегом релиза, который Actions передаёт командой ssh: `v1.2.0` или в монорепо
@@ -208,7 +209,8 @@ docker run --rm --network vpn curlimages/curl -sx http://vpn:3128 https://www.cl
 ## Сервер с нуля
 
 1. Docker Engine из apt-репозитория docker.com и `apt install jq`.
-2. Файрвол: `ufw allow 22/tcp`, `ufw allow 80/tcp`, `ufw allow 443` (TCP и UDP для HTTP/3).
+2. Файрвол: `ufw allow 22/tcp`, `ufw allow 80/tcp`, `ufw allow 443` (TCP и UDP для HTTP/3),
+   для TURN codenames `ufw allow 3478` и `ufw allow 49160:49999/udp`.
 3. Сети: `docker network create edge` и `docker network create vpn`.
 4. Deploy key для этого репо (см. [Новый проект](#новый-проект)), затем
    `git clone github-infra-server:aimuzov/infra-server.git /srv/infra-server`.
