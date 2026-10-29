@@ -40,7 +40,12 @@ set -euo pipefail
 	fi
 
 	# --remove-orphans убирает контейнеры сервисов, которых в compose-файле уже нет.
-	docker compose -f deploy/docker-compose.yml up -d --build --quiet-pull --remove-orphans
+	# Монорепо выкладывает подпроекты из отдельных клонов, у каждого свой compose-файл
+	# по имени проекта: /srv/reabica-app берёт deploy/reabica-app.yml. Без него -- общий.
+	compose=deploy/docker-compose.yml
+	[[ -f deploy/$project.yml ]] && compose=deploy/$project.yml
+
+	docker compose -f "$compose" up -d --build --quiet-pull --remove-orphans
 	docker image prune -f >/dev/null
 	exit
 }
