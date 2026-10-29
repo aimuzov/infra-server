@@ -1,0 +1,13 @@
+# Грань, репо aimuzov/panels, на сервере /srv/panels.
+
+panels.aimuzov.online {
+	import common
+
+	handle /api/* {
+		reverse_proxy panels-api:8787
+	}
+
+	handle {
+		reverse_proxy panels:80
+	}
+}
