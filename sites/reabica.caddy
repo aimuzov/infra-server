@@ -25,3 +25,17 @@ docs.reabica.ru {
 		reverse_proxy reabica:80
 	}
 }
+
+# CRM, тот же репо, клон /srv/reabica-app (deploy/reabica-app.yml). Basic auth нет:
+# в CRM входят по логину сотрудника, а health нужен деплою без пароля.
+app.reabica.ru {
+	import common
+
+	handle /api/* {
+		reverse_proxy reabica-app-api:8080
+	}
+
+	handle {
+		reverse_proxy reabica-app:80
+	}
+}
