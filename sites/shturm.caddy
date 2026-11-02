@@ -1,0 +1,17 @@
+shturm.aimuzov.online {
+	import common
+
+	header {
+		# Временный адрес: в поиске должен остаться только cf-shturm.ru.
+		X-Robots-Tag "noindex, nofollow"
+	}
+
+	reverse_proxy shturm-site:80
+
+	log {
+		output file /data/shturm.log {
+			roll_size 5MiB
+			roll_keep 2
+		}
+	}
+}
