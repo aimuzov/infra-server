@@ -19,7 +19,7 @@
 
 www.skator.ru {
 	header Strict-Transport-Security "max-age=31536000"
-	redir https://skator.ru{uri} permanent
+	redir https://skator.ru{uri} 308
 }
 
 skator.ru {
@@ -52,7 +52,7 @@ skator.ru {
 # тут зависеть нечему.
 www.xn--80atnibi.xn--p1ai {
 	header Strict-Transport-Security "max-age=31536000"
-	redir https://xn--80atnibi.xn--p1ai{uri} permanent
+	redir https://xn--80atnibi.xn--p1ai{uri} 308
 }
 
 xn--80atnibi.xn--p1ai {
@@ -65,7 +65,7 @@ xn--80atnibi.xn--p1ai {
 	# никого бы не пустила.
 	@panel path /admin* /api/admin*
 	handle @panel {
-		redir https://skator.ru{uri} permanent
+		redir https://skator.ru{uri} 308
 	}
 
 	# API и ассеты отдаём как есть: 404 здесь — ответ метода или
