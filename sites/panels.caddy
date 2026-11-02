@@ -1,6 +1,10 @@
-# Грань, репо aimuzov/panels, на сервере /srv/panels.
+# ПуфикМебель, репо aimuzov/panels, на сервере /srv/panels.
 
-panels.aimuzov.online {
+panels.aimuzov.online, www.pufikmebel.ru {
+	redir https://pufikmebel.ru{uri} permanent
+}
+
+pufikmebel.ru {
 	import common
 
 	handle /api/* {
