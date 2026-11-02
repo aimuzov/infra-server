@@ -36,6 +36,7 @@ flowchart LR
 
 | Domain                                                         | Project                                                                           | Containers                                   |
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------- |
+| [skator.ru](https://skator.ru), [скатор.рф](https://xn--80atnibi.xn--p1ai) | Private client project | `skator-site`, `skator-bot`, `skator-mail` |
 | [tatiana-shkatova.ru](https://tatiana-shkatova.ru)             | [aimuzov/shkatova-psychologist](https://github.com/aimuzov/shkatova-psychologist) | `shkatova-psychologist`, `shkatova-chat`     |
 | [taplist.aimuzov.online](https://taplist.aimuzov.online)       | [aimuzov/community-taplist](https://github.com/aimuzov/community-taplist)         | `community-taplist`, `community-taplist-api` |
 | [codenames.aimuzov.online](https://codenames.aimuzov.online)   | [aimuzov/codenames](https://github.com/aimuzov/codenames)                         | `codenames`, `codenames-relay`               |
