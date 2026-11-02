@@ -1,0 +1,99 @@
+# Общее для skator.ru и зеркала скатор.рф. Вынесено, чтобы
+# настройки двух доменов не разъехались при правке.
+(skator-common) {
+	encode zstd gzip
+
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Strict-Transport-Security "max-age=31536000"
+	}
+
+	# Хэшированные ассеты Astro не меняются при том же имени — кэшируем надолго.
+	@assets path /_astro/*
+	header @assets Cache-Control "public, max-age=31536000, immutable" {
+		match status 2xx
+	}
+}
+
+www.skator.ru {
+	header Strict-Transport-Security "max-age=31536000"
+	redir https://skator.ru{uri} permanent
+}
+
+skator.ru {
+	import skator-common
+
+	# Лендинг в чужом iframe показывать незачем — кликджекинг на форме заявки.
+	@site not path /admin* /api/admin*
+	header @site X-Frame-Options SAMEORIGIN
+
+	# Админка — Telegram Mini App, и в вебе Telegram открывает её как раз в своём iframe:
+	# SAMEORIGIN такое встраивание запрещает, поэтому здесь вместо него список источников.
+	@panel path /admin* /api/admin*
+	header @panel Content-Security-Policy "frame-ancestors https://web.telegram.org https://*.telegram.org"
+
+	reverse_proxy skator-site:4321 {
+		# Реальный адрес нужен ограничителю заявок в /api/lead.
+		trusted_proxies 153.80.247.167
+	}
+
+	log {
+		output file /data/access.log {
+			roll_size 5MiB
+			roll_keep 2
+		}
+	}
+}
+
+# Зеркало на кириллическом домене скатор.рф. Имена в punycode:
+# Caddyfile уезжает на сервер через scp, и от кодировки файла
+# тут зависеть нечему.
+www.xn--80atnibi.xn--p1ai {
+	header Strict-Transport-Security "max-age=31536000"
+	redir https://xn--80atnibi.xn--p1ai{uri} permanent
+}
+
+xn--80atnibi.xn--p1ai {
+	import skator-common
+
+	header X-Frame-Options SAMEORIGIN
+
+	# Админка остаётся на одном домене: подпись initData Telegram
+	# отдаёт только для адреса из BotFather, и с зеркала Mini App
+	# никого бы не пустила.
+	@panel path /admin* /api/admin*
+	handle @panel {
+		redir https://skator.ru{uri} permanent
+	}
+
+	# API и ассеты отдаём как есть: 404 здесь — ответ метода или
+	# пропавший файл, а не забытый адрес старого сайта.
+	@passthru path /api/* /_astro/*
+	handle @passthru {
+		reverse_proxy skator-site:4321 {
+			trusted_proxies 153.80.247.167
+		}
+	}
+
+	handle {
+		reverse_proxy skator-site:4321 {
+			trusted_proxies 153.80.247.167
+
+			# До нас домен держал сайт на конструкторе, его адреса остались
+			# в выдаче. Уводим их на главную вместо 404-страницы.
+			@notfound status 404
+			handle_response @notfound {
+				redir https://xn--80atnibi.xn--p1ai/ 302
+			}
+		}
+	}
+
+	log {
+		output file /data/skator-rf.log {
+			roll_size 5MiB
+			roll_keep 2
+		}
+	}
+}
