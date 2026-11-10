@@ -42,6 +42,13 @@ parse_site_images() {
 			site_containers=(thinks-mcp)
 			digests=("$first")
 			;;
+		panels)
+			[[ -n $second ]] || { echo 'Panels requires two image digests' >&2; return 2; }
+			services=(site api)
+			names=(panels-site panels-api)
+			site_containers=(panels panels-api)
+			digests=("$first" "$second")
+			;;
 		*)
 			echo 'Registry deployment is disabled for this project' >&2
 			return 2
@@ -75,6 +82,7 @@ site_image_health() {
 	case "$1" in
 		sublya) urls=(https://sublya.aimuzov.online/ https://sublya.aimuzov.online/admin/api/health) ;;
 		thinks-mcp) urls=(https://thinks-mcp.aimuzov.online/health) ;;
+		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
 		*) return 2 ;;
 	esac
 	for url in "${urls[@]}"; do
