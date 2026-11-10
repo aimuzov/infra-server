@@ -49,6 +49,13 @@ parse_site_images() {
 			site_containers=(panels panels-api)
 			digests=("$first" "$second")
 			;;
+		paralpac)
+			[[ -z $second ]] || { echo 'Paralpac requires one image digest' >&2; return 2; }
+			services=(app)
+			names=(paralpac)
+			site_containers=(paralpac)
+			digests=("$first")
+			;;
 		*)
 			echo 'Registry deployment is disabled for this project' >&2
 			return 2
@@ -83,6 +90,23 @@ site_image_health() {
 		sublya) urls=(https://sublya.aimuzov.online/ https://sublya.aimuzov.online/admin/api/health) ;;
 		thinks-mcp) urls=(https://thinks-mcp.aimuzov.online/health) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
+		paralpac)
+			local attempt
+			for attempt in {1..7}; do
+				if docker exec paralpac node --input-type=module -e '
+					const user = process.env.CHATMELD_USER || "admin";
+					const password = process.env.CHATMELD_PASSWORD;
+					if (!password) process.exit(1);
+					const url = "http://127.0.0.1:" + (process.env.CHATMELD_PORT || "4321") + "/api/state";
+					const authorization = "Basic " + Buffer.from(user + ":" + password).toString("base64");
+					const response = await fetch(url, { headers: { authorization }, signal: AbortSignal.timeout(5000) });
+					if (!response.ok || (await response.json()).role !== "owner") process.exit(1);
+				' >/dev/null 2>&1; then return 0; fi
+				sleep 3
+			done
+			echo 'Paralpac authenticated health check failed' >&2
+			return 1
+			;;
 		*) return 2 ;;
 	esac
 	for url in "${urls[@]}"; do
