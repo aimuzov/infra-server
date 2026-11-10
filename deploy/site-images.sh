@@ -56,6 +56,13 @@ parse_site_images() {
 			site_containers=(prestige-logist prestige-logist-api)
 			digests=("$first" "$second")
 			;;
+		peeshet)
+			[[ -z $second ]] || { echo 'Peeshet requires one image digest' >&2; return 2; }
+			services=(app)
+			names=(peeshet)
+			site_containers=(peeshet)
+			digests=("$first")
+			;;
 		paralpac)
 			[[ -z $second ]] || { echo 'Paralpac requires one image digest' >&2; return 2; }
 			services=(app)
@@ -105,6 +112,7 @@ site_image_health() {
 		thinks-mcp) urls=(https://thinks-mcp.aimuzov.online/health) ;;
 		prestige-logist) urls=(https://logist.aimuzov.online/ https://logist.aimuzov.online/api/health) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
+		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
 		paralpac)
 			local attempt
