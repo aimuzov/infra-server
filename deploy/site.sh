@@ -16,14 +16,14 @@ set -euo pipefail
 		exit 2
 	fi
 
-	ref=${2:-${SSH_ORIGINAL_COMMAND:-}}
-	# В монорепо тег начинается с имени подпроекта: docs-v1.3.0.
-	if [[ -n $ref && ! $ref =~ ^([a-z0-9]+-)?v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-		echo "not a release tag: $ref" >&2
-		exit 2
-	fi
+	request=${2:-${SSH_ORIGINAL_COMMAND:-}}
+	source "$(dirname "${BASH_SOURCE[0]}")/site-images.sh"
+	parse_site_images "$project" "$request"
 
 	unit="site-deploy@$project.service"
+	install -d /run/site-deploy
+	exec 8>"/run/site-deploy/$project.request.lock"
+	flock 8
 
 	# Сборка этого сайта ещё идёт, например после обрыва соединения. Даём ей закончиться
 	# и собираем заново, чтобы запрошенная версия тоже выехала.
@@ -33,17 +33,16 @@ set -euo pipefail
 	done
 
 	# Юнит не принимает аргументов кроме проекта, поэтому тег передаём через файл.
-	install -d /run/site-deploy
-	printf '%s\n' "$ref" > "/run/site-deploy/$project.ref"
+	printf '%s\n' "$request" > "/run/site-deploy/$project.ref"
 
-	journalctl -u "$unit" -f -n 0 -o cat &
+	journalctl -u "$unit" -f -n 0 -o cat 8>&- &
 	log=$!
 	trap 'kill "$log" 2>/dev/null' EXIT
 
 	# Блокируется до конца сборки и падает вместе с ней. Джоба принадлежит systemd,
 	# поэтому переживёт смерть этого клиента вместе с соединением.
 	status=0
-	systemctl start "$unit" || status=$?
+	systemctl start "$unit" 8>&- || status=$?
 
 	# journalctl может немного отставать от юнита, даём ему дописать хвост лога.
 	sleep 1
