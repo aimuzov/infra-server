@@ -56,6 +56,13 @@ parse_site_images() {
 			site_containers=(paralpac)
 			digests=("$first")
 			;;
+		skator)
+			[[ -n $second ]] || { echo 'Skator requires application and mail digests' >&2; return 2; }
+			services=(site bot mail)
+			names=(skator skator skator-mail)
+			site_containers=(skator-site skator-bot skator-mail)
+			digests=("$first" "$first" "$second")
+			;;
 		*)
 			echo 'Registry deployment is disabled for this project' >&2
 			return 2
@@ -90,6 +97,7 @@ site_image_health() {
 		sublya) urls=(https://sublya.aimuzov.online/ https://sublya.aimuzov.online/admin/api/health) ;;
 		thinks-mcp) urls=(https://thinks-mcp.aimuzov.online/health) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
+		skator) urls=(https://skator.ru/robots.txt) ;;
 		paralpac)
 			local attempt
 			for attempt in {1..7}; do
@@ -115,6 +123,10 @@ site_image_health() {
 		curl --fail --silent --show-error --output /dev/null --max-time 5 \
 			--retry 6 --retry-delay 3 --retry-all-errors --resolve "$host:443:127.0.0.1" "$url" || return
 	done
+	if [[ $1 == skator ]]; then
+		[[ $(docker inspect -f '{{.State.Running}}' skator-bot) == true ]] &&
+			[[ $(docker inspect -f '{{.State.Health.Status}}' skator-mail) == healthy ]]
+	fi
 }
 
 site_save_rollback() {
