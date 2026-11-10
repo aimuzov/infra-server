@@ -63,6 +63,13 @@ parse_site_images() {
 			site_containers=(peeshet)
 			digests=("$first")
 			;;
+		wodlog)
+			[[ -n $second ]] || { echo 'Wodlog requires two image digests' >&2; return 2; }
+			services=(site api)
+			names=(wodlog-site wodlog-api)
+			site_containers=(wodlog wodlog-api)
+			digests=("$first" "$second")
+			;;
 		paralpac)
 			[[ -z $second ]] || { echo 'Paralpac requires one image digest' >&2; return 2; }
 			services=(app)
@@ -111,6 +118,7 @@ site_image_health() {
 		sublya) urls=(https://sublya.aimuzov.online/ https://sublya.aimuzov.online/admin/api/health) ;;
 		thinks-mcp) urls=(https://thinks-mcp.aimuzov.online/health) ;;
 		prestige-logist) urls=(https://logist.aimuzov.online/ https://logist.aimuzov.online/api/health) ;;
+		wodlog) urls=(https://wodlog.aimuzov.online/ https://wodlog.aimuzov.online/api/health) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
