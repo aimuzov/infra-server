@@ -86,15 +86,20 @@ site_image_health() {
 }
 
 site_save_rollback() {
-	local state=$1 compose=$2 image tag i
+	local state=$1 compose=$2 image manifest local_manifest tag i
 	install -d -m 0700 "$state"
 	git rev-parse HEAD > "$state/revision"
 	printf '%s\n' "$compose" > "$state/compose"
 	printf 'services:\n' > "$state/images.yml"
 	for i in "${!site_services[@]}"; do
-		image=$(docker inspect --type container --format '{{.Image}}' "${site_containers[i]}") || return
-		[[ $image =~ ^sha256:[0-9a-f]{64}$ ]] || return 2
-		tag="site-rollback/${site_containers[i]}:${image:7}"
+		image=$(docker inspect --type container --format '{{.Config.Image}}' "${site_containers[i]}") || return
+		manifest=$(docker inspect --type container --format '{{.ImageManifestDescriptor.Digest}}' "${site_containers[i]}") || return
+		local_manifest=$(docker image inspect --platform linux/amd64 --format '{{.Descriptor.Digest}}' "$image") || return
+		if [[ ! $manifest =~ ^sha256:[0-9a-f]{64}$ || $local_manifest != "$manifest" ]]; then
+			echo "Cannot pin the running image for ${site_containers[i]}: local manifest mismatch" >&2
+			return 2
+		fi
+		tag="site-rollback/${site_containers[i]}:${manifest:7}"
 		docker image tag "$image" "$tag" || return
 		printf '  %s:\n    image: %s\n' "${site_services[i]}" "$tag" >> "$state/images.yml"
 	done
