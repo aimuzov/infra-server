@@ -84,6 +84,13 @@ parse_site_images() {
 			site_containers=(shkatova-psychologist shkatova-chat)
 			digests=("$first" "$second")
 			;;
+		sorebody)
+			[[ -n $second ]] || { echo 'Sorebody requires site and API image digests' >&2; return 2; }
+			services=(site api)
+			names=(sorebody-site sorebody-api)
+			site_containers=(sorebody sorebody-api)
+			digests=("$first" "$second")
+			;;
 		paralpac)
 			[[ -z $second ]] || { echo 'Paralpac requires one image digest' >&2; return 2; }
 			services=(app)
@@ -135,6 +142,7 @@ site_image_health() {
 		wodlog) urls=(https://wodlog.aimuzov.online/ https://wodlog.aimuzov.online/api/health) ;;
 		community-taplist) urls=(https://taplist.aimuzov.online/ https://taplist.aimuzov.online/api/health) ;;
 		shkatova-psychologist) urls=(https://tatiana-shkatova.ru/ https://tatiana-shkatova.ru/api/health) ;;
+		sorebody) urls=(https://sorebody.aimuzov.online/ https://sorebody.aimuzov.online/api/health) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
