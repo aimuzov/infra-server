@@ -4,7 +4,7 @@ parse_site_images() {
 	local project=$1 request=$2
 	local digest='sha256:[0-9a-f]{64}'
 	local release='([a-z0-9]+-)?v[0-9]+\.[0-9]+\.[0-9]+'
-	local first second
+	local first second registry=ghcr.io/aimuzov
 	local -a services=() names=() digests=()
 
 	site_ref=
@@ -106,6 +106,14 @@ parse_site_images() {
 			site_containers=(codenames codenames-relay)
 			digests=("$first" "$second")
 			;;
+		lazyvimx-site)
+			[[ -z $second ]] || { echo 'Lazyvimx Site requires one image digest' >&2; return 2; }
+			services=(site)
+			registry=ghcr.io/lazyvimx
+			names=(site)
+			site_containers=(lazyvimx-site)
+			digests=("$first")
+			;;
 		paralpac)
 			[[ -z $second ]] || { echo 'Paralpac requires one image digest' >&2; return 2; }
 			services=(app)
@@ -130,7 +138,7 @@ parse_site_images() {
 	site_services=("${services[@]}")
 	site_override='services:'
 	for i in "${!services[@]}"; do
-		site_images+=("ghcr.io/aimuzov/${names[i]}@${digests[i]}")
+		site_images+=("${registry}/${names[i]}@${digests[i]}")
 		printf -v site_override '%s\n  %s:\n    image: %s' \
 			"$site_override" "${services[i]}" "${site_images[i]}"
 	done
@@ -160,6 +168,7 @@ site_image_health() {
 		sorebody) urls=(https://sorebody.aimuzov.online/ https://sorebody.aimuzov.online/api/health) ;;
 		kaiten-mcp) urls=(https://kaiten-mcp.aimuzov.online/health) ;;
 		codenames) urls=(https://codenames.aimuzov.online/ https://codenames.aimuzov.online/api/health) ;;
+		lazyvimx-site) urls=(https://lazyvimx.aimuzov.online/) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
