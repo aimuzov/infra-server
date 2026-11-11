@@ -61,7 +61,7 @@ deploy/site-deploy@.service   systemd-юнит сборки сайта, пере
 ssh/10-no-passwords.conf  sshd: только ключи, без паролей; ставится при каждой выкладке
 vpn/update.sh             собирает конфиг Xray из подписки
 vpn/vpn-update.{service,timer}   обновление конфига раз в сутки
-docker/docker-prune.{service,timer}   чистка кэша сборки Docker раз в неделю
+docker/docker-prune.{service,timer}   ежедневная чистка кеша сборки Docker до 512 МБ
 .env.example              образец секретов (настоящий .env есть только на сервере)
 ```
 
