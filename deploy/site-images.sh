@@ -18,12 +18,13 @@ parse_site_images() {
 		site_ref=$request
 		return 0
 	fi
-	if [[ ! $request =~ ^images\ ($release)\ ([0-9a-f]{40})\ ($digest)(\ ($digest))?$ ]]; then
+	if [[ ! $request =~ ^images\ ($release|main)\ ([0-9a-f]{40})\ ($digest)(\ ($digest))?$ ]]; then
 		echo 'Invalid deployment request' >&2
 		return 2
 	fi
 
 	site_ref=${BASH_REMATCH[1]}
+	[[ $site_ref != main ]] || site_ref=
 	site_revision=${BASH_REMATCH[3]}
 	first=${BASH_REMATCH[4]}
 	second=${BASH_REMATCH[6]}
