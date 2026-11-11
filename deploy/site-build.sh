@@ -75,6 +75,8 @@ set -euo pipefail
 			site_restore_rollback "$state" "$project"
 			exit 1
 		fi
+		python3 /srv/infra-server/deploy/site-retention.py --lock-fd 9 record \
+			"$project" "$state" "${site_containers[@]}"
 	else
 		git checkout --quiet --detach "$target"
 		git log -1 --format="%h %s ($(git describe --tags --always))"

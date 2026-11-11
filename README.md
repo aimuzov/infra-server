@@ -62,11 +62,18 @@ deploy/site-deploy@.service   systemd unit of a site build, outlives the SSH con
 ssh/10-no-passwords.conf  sshd: keys only, no passwords; applied on every deploy
 vpn/update.sh             builds the Xray config from the subscription
 vpn/vpn-update.{service,timer}   daily config refresh
-docker/docker-prune.{service,timer}   daily Docker build cache cleanup toward 512 MB
+deploy/site-retention.py   keep current images and one usable rollback per registered project
+docker/docker-prune.{service,timer}   daily image rotation and build cache cleanup toward 512 MB
 .env.example              secrets template (the real .env lives only on the server)
 ```
 
 ## Server conventions
+
+Registered GHCR projects rotate images after a healthy deployment and daily. The current
+version and one usable previous version stay local. All container references, including
+stopped containers, are protected. Unregistered projects and volumes are left alone.
+Register an existing project with `python3 deploy/site-retention.py adopt <project>`;
+preview cleanup with `python3 deploy/site-retention.py cleanup --dry-run`.
 
 ```
 /srv/

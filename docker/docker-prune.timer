@@ -1,5 +1,5 @@
 [Unit]
-Description=Bound unused Docker build cache daily
+Description=Rotate project images and bound build cache daily
 
 [Timer]
 OnCalendar=daily
