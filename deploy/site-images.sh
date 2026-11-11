@@ -99,6 +99,13 @@ parse_site_images() {
 			site_containers=(kaiten-mcp)
 			digests=("$first")
 			;;
+		codenames)
+			[[ -n $second ]] || { echo 'Codenames requires site and relay image digests' >&2; return 2; }
+			services=(site relay)
+			names=(codenames-site codenames-relay)
+			site_containers=(codenames codenames-relay)
+			digests=("$first" "$second")
+			;;
 		paralpac)
 			[[ -z $second ]] || { echo 'Paralpac requires one image digest' >&2; return 2; }
 			services=(app)
@@ -152,6 +159,7 @@ site_image_health() {
 		shkatova-psychologist) urls=(https://tatiana-shkatova.ru/ https://tatiana-shkatova.ru/api/health) ;;
 		sorebody) urls=(https://sorebody.aimuzov.online/ https://sorebody.aimuzov.online/api/health) ;;
 		kaiten-mcp) urls=(https://kaiten-mcp.aimuzov.online/health) ;;
+		codenames) urls=(https://codenames.aimuzov.online/ https://codenames.aimuzov.online/api/health) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
