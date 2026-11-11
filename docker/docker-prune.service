@@ -1,11 +1,9 @@
 [Unit]
-Description=Drop Docker build cache older than a week
+Description=Bound unused Docker build cache to 512 MB
 After=docker.service
 Requires=docker.service
 
 [Service]
 Type=oneshot
-# Каждый деплой собирает образы, а кеш старых сборок больше не используется: на диске
-# в 30 ГБ он занимал 18 ГБ. Неделю храним потому что это ещё переиспользуют следующие
-# деплои всех проектов.
-ExecStart=/usr/bin/docker builder prune --force --filter until=168h
+# Одна блокировка с деплоями: очистка ждёт окончания серверной сборки.
+ExecStart=/usr/bin/flock /tmp/sites-deploy.lock /usr/bin/docker buildx prune --builder default --all --force --max-used-space=512MB --reserved-space=0

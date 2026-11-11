@@ -1,8 +1,8 @@
 [Unit]
-Description=Drop old Docker build cache once a week
+Description=Bound unused Docker build cache daily
 
 [Timer]
-OnCalendar=weekly
+OnCalendar=daily
 RandomizedDelaySec=1h
 Persistent=true
 
