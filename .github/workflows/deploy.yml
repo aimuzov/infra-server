@@ -17,6 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: shellcheck -x -P SCRIPTDIR deploy/remote.sh deploy/site.sh deploy/site-build.sh vpn/update.sh
+      - run: python3 -m unittest discover -s deploy/tests
       # Тот же образ, что в compose.yml, чтобы сломанный конфиг не доехал до сервера.
       # Хеш одноразовый: настоящий секрет живёт только в .env на сервере.
       - run: >-

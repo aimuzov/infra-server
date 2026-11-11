@@ -1,9 +1,10 @@
 [Unit]
-Description=Bound unused Docker build cache to 512 MB
+Description=Rotate project images and bound unused Docker build cache
 After=docker.service
 Requires=docker.service
 
 [Service]
 Type=oneshot
 # Одна блокировка с деплоями: очистка ждёт окончания серверной сборки.
+ExecStart=/usr/bin/python3 /srv/infra-server/deploy/site-retention.py cleanup
 ExecStart=/usr/bin/flock /tmp/sites-deploy.lock /usr/bin/docker buildx prune --builder default --all --force --max-used-space=512MB --reserved-space=0
