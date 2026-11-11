@@ -77,6 +77,13 @@ parse_site_images() {
 			site_containers=(community-taplist community-taplist-api)
 			digests=("$first" "$second")
 			;;
+		shkatova-psychologist)
+			[[ -n $second ]] || { echo 'Shkatova requires site and chat image digests' >&2; return 2; }
+			services=(site chat)
+			names=(shkatova-psychologist-site shkatova-psychologist-chat)
+			site_containers=(shkatova-psychologist shkatova-chat)
+			digests=("$first" "$second")
+			;;
 		paralpac)
 			[[ -z $second ]] || { echo 'Paralpac requires one image digest' >&2; return 2; }
 			services=(app)
@@ -127,6 +134,7 @@ site_image_health() {
 		prestige-logist) urls=(https://logist.aimuzov.online/ https://logist.aimuzov.online/api/health) ;;
 		wodlog) urls=(https://wodlog.aimuzov.online/ https://wodlog.aimuzov.online/api/health) ;;
 		community-taplist) urls=(https://taplist.aimuzov.online/ https://taplist.aimuzov.online/api/health) ;;
+		shkatova-psychologist) urls=(https://tatiana-shkatova.ru/ https://tatiana-shkatova.ru/api/health) ;;
 		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
