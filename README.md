@@ -62,7 +62,7 @@ deploy/site-deploy@.service   systemd unit of a site build, outlives the SSH con
 ssh/10-no-passwords.conf  sshd: keys only, no passwords; applied on every deploy
 vpn/update.sh             builds the Xray config from the subscription
 vpn/vpn-update.{service,timer}   daily config refresh
-docker/docker-prune.{service,timer}   weekly cleanup of the Docker build cache
+docker/docker-prune.{service,timer}   daily Docker build cache cleanup toward 512 MB
 .env.example              secrets template (the real .env lives only on the server)
 ```
 
