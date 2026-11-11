@@ -46,10 +46,10 @@ jobs:
       - name: Deploy on server
         env:
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          KNOWN_HOST: '185.219.43.208 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC2ZdrmhppTABH63kiUI77k6cWL7D034ZN3aFnd5PUf5Av/Kpf+ipgL4Wet/iZ1CakOTlXGmiSPVJIaY1QFebdpk7Lzm2D0Ol7jbfTW9C+BQSvd4I+qnOPNTECaV8Bw5xbVu8Ks3Ht55FHLCOf7W3rA2L39tvQebhI+3ViYoF1jdWPVIm1aAM7KlW+TZG3wWVAT7pr8aqjr0EoqHNGpKRIe95dyCPfs8m7k7r7sIzxO25vLCR4Cz9ti1tS93IXMfKwxkIiqcpIwlBy2M+qOFkHHiLs7Cn9Ay6MwPK/V70LxB6C4D8ejcHklOCLyP4wc4bW8osQ7Idu2YMWt8HYOFUZFKjJ+FkY5zxbFmBf1ffMvGzdtC0ZUqVRxLKN5/3c5+2Ox8VvAycgVhLFoeSZGe3xOFKUC+wHqOOJCYufaAlVInx9o5jv+6pShGJ6eoKJyTsb2dXwPWPcoXEPt3SdonAjtworfsQKDqTPMjmqyCM/qweYB/oUR9e+48utM9zFC44s='
+          KNOWN_HOST: '141.133.188.169 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINnRXayyFSNqYxBbGbHCh60Y6jUyhLT47gwSeoqQRvsd'
         run: |
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy
           chmod 600 ~/.ssh/deploy
           printf '%s\n' "$KNOWN_HOST" > ~/.ssh/known_hosts
-          ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes -o BatchMode=yes root@185.219.43.208
+          ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes -o BatchMode=yes root@141.133.188.169
