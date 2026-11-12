@@ -1,0 +1,7 @@
+paralpac.aimuzov.online {
+	import common
+
+	reverse_proxy paralpac:4321 {
+		flush_interval -1
+	}
+}
