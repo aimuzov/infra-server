@@ -225,13 +225,28 @@ docker run --rm --network vpn curlimages/curl -sx http://vpn:3128 https://www.cl
 4. Deploy key for this repo (see [Adding a project](#adding-a-project)), then
    `git clone github-infra-server:aimuzov/infra-server.git /srv/infra-server`.
 5. `/srv/infra-server/.env` from [`.env.example`](.env.example), then run `deploy/remote.sh` once.
-6. Shell: root gets fish from [dotfiles](https://github.com/aimuzov/dotfiles/blob/main/docs/fish/README.md#linux-server),
-   bash stays the login shell and an interactive SSH login switches to fish. Install the
-   `chezmoi_<version>_linux_amd64.deb` from [chezmoi releases](https://github.com/twpayne/chezmoi/releases)
-   after checking it against `checksums.txt`, then
-   `chezmoi init --apply --recurse-submodules=false https://github.com/aimuzov/dotfiles.git`.
-   After that every deploy of this repo runs `chezmoi update`, so changes of the dotfiles get
-   here with the next deploy (or `gh workflow run deploy.yml`).
+6. The shell profile is installed by `deploy/remote.sh` automatically. See [Server shell](#server-shell).
+
+## Server shell
+
+The root shell profile lives in [`shell/`](shell/). Every infrastructure deploy runs its
+installer, including on a fresh Debian 13 amd64 server. It installs fish, fzf, zoxide, fd,
+bat, Oh My Posh and Ghostty terminfo. Bash remains the login shell; interactive SSH switches
+to fish. Repeated runs do not download binaries that already match the pinned versions.
+
+For manual setup:
+
+```bash
+sudo bash /srv/infra-server/shell/install.sh
+```
+
+The installer preserves custom `.bashrc` content and adds one source line. The first
+versions of changed files are backed up in `/root/.local/state/infra-server/shell-backup`.
+The profile and bundled themes/plugins are reviewed with this repository. No chezmoi or
+private dotfiles submodules are needed. See [upstream revisions and licenses](shell/UPSTREAM.md).
+
+Reconnect with `ssh projects` to check the prompt. CI installs the profile twice in a clean
+Debian container and checks the integrations, Bash preservation, and repeated installation.
 
 ## License
 
