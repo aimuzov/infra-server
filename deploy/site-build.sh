@@ -44,6 +44,11 @@ set -euo pipefail
 	compose=deploy/docker-compose.yml
 	[[ -f deploy/$project.yml ]] && compose=deploy/$project.yml
 
+	if [[ $project == pufikmebel ]] && ! git show "$target:$compose" | grep -qx 'name: pufikmebel'; then
+		echo 'Pre-rename releases require the migration backup and matching infrastructure' >&2
+		exit 2
+	fi
+
 	if [[ -n $site_override ]]; then
 		available=$(df -Pk /var/lib/docker | awk 'NR == 2 {print $4}')
 		if (( available < 4 * 1024 * 1024 )); then

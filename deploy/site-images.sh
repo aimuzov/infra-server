@@ -43,11 +43,11 @@ parse_site_images() {
 			site_containers=(thinks-mcp)
 			digests=("$first")
 			;;
-		panels)
-			[[ -n $second ]] || { echo 'Panels requires two image digests' >&2; return 2; }
+		pufikmebel)
+			[[ -n $second ]] || { echo 'Pufikmebel requires two image digests' >&2; return 2; }
 			services=(site api)
-			names=(panels-site panels-api)
-			site_containers=(panels panels-api)
+			names=(pufikmebel-site pufikmebel-api)
+			site_containers=(pufikmebel pufikmebel-api)
 			digests=("$first" "$second")
 			;;
 		prestige-logist)
@@ -169,7 +169,7 @@ site_image_health() {
 		kaiten-mcp) urls=(https://kaiten-mcp.aimuzov.online/health) ;;
 		codenames) urls=(https://codenames.aimuzov.online/ https://codenames.aimuzov.online/api/health) ;;
 		lazyvimx-site) urls=(https://lazyvimx.aimuzov.online/) ;;
-		panels) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
+		pufikmebel) urls=(https://pufikmebel.ru/ https://pufikmebel.ru/api/health) ;;
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
 		paralpac)
