@@ -224,13 +224,29 @@ docker run --rm --network vpn curlimages/curl -sx http://vpn:3128 https://www.cl
    `git clone github-infra-server:aimuzov/infra-server.git /srv/infra-server`.
 5. `/srv/infra-server/.env` по образцу [`.env.example`](.env.example), затем один раз
    `deploy/remote.sh`.
-6. Оболочка: root получает fish из [dotfiles](https://github.com/aimuzov/dotfiles/blob/main/docs/fish/README.ru.md#linux-сервер),
-   bash остаётся login shell, а интерактивный вход по SSH переключается в fish. Поставить
-   `chezmoi_<version>_linux_amd64.deb` из [релизов chezmoi](https://github.com/twpayne/chezmoi/releases),
-   сверив его с `checksums.txt`, затем
-   `chezmoi init --apply --recurse-submodules=false https://github.com/aimuzov/dotfiles.git`.
-   Дальше каждый деплой этого репо делает `chezmoi update`, так что правки dotfiles приезжают
-   со следующим деплоем (или `gh workflow run deploy.yml`).
+6. Профиль оболочки автоматически устанавливает `deploy/remote.sh`.
+   См. [Оболочка сервера](#оболочка-сервера).
+
+## Оболочка сервера
+
+Профиль root хранится в [`shell/`](shell/). Каждый деплой infra-server запускает установщик,
+в том числе на чистом Debian 13 amd64. Он ставит fish, fzf, zoxide, fd, bat, Oh My Posh
+и terminfo Ghostty. Bash остаётся login shell, интерактивный SSH переключается в fish.
+При повторном запуске бинарники нужной версии не скачиваются.
+
+Для ручной установки:
+
+```bash
+sudo bash /srv/infra-server/shell/install.sh
+```
+
+Установщик сохраняет содержимое `.bashrc` и добавляет строку подключения профиля.
+Первые версии изменённых файлов сохраняются в `/root/.local/state/infra-server/shell-backup`.
+Конфиг, темы и плагины проверяются вместе с этим репозиторием. Chezmoi и приватные
+сабмодули dotfiles не нужны. См. [ревизии и лицензии внешних компонентов](shell/UPSTREAM.md).
+
+После установки переподключиться через `ssh projects`. CI дважды устанавливает профиль
+в чистом Debian и проверяет интеграции, сохранение Bash и повторную установку.
 
 ## Лицензия
 

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "type": "prompt",
+      "segments": [
+        {
+          "foreground": "yellow",
+          "style": "plain",
+          "template": "{{ if .SSHSession }}<white>󰒋</> {{ if .Root }}<red>{{ .UserName }}</>{{ else }}{{ .UserName }}{{ end }}@{{ .HostName }} {{ end }}",
+          "type": "session"
+        },
+        {
+          "foreground": "cyan",
+          "properties": { "style": "folder" },
+          "style": "plain",
+          "template": "<white></> {{ .Path }}",
+          "type": "path"
+        },
+        {
+          "style": "plain",
+          "template": " {{ if eq .Env.FISH_BIND_MODE \"default\" }}<blue>󰰓</>{{ else if eq .Env.FISH_BIND_MODE \"insert\" }}<magenta>󰰄</>{{ else if eq .Env.FISH_BIND_MODE \"replace_one\" }}<yellow>󰰟</>{{ else if eq .Env.FISH_BIND_MODE \"visual\"}}<cyan>󰰫</>{{ end }}",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "alignment": "right",
+      "type": "rprompt",
+      "segments": [
+        {
+          "foreground": "green",
+          "style": "plain",
+          "template": "{{ if .Full }}<white>󰋙</> {{ .Full }} {{ end }}",
+          "type": "node"
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "foreground": "blue",
+          "template": "{{ if .UpstreamIcon }}<white>{{ .UpstreamIcon }}</>{{ end }}{{ if .HEAD }} {{ .HEAD }}{{ end }}",
+          "properties": {
+            "branch_icon": "",
+            "fetch_status": true,
+            "fetch_upstream_icon": true,
+            "source": "cli",
+            "mapped_branches": {
+              "release/*": "r/",
+              "feature/*": "f/",
+              "bugfix/*": "b/"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "final_space": true,
+  "version": 3
+}

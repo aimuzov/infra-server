@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+if [[ $- == *i* && -n ${SSH_TTY:-} && ${SHLVL:-1} -le 1 ]] && command -v fish >/dev/null; then
+	exec fish
+fi
