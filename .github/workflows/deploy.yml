@@ -9,28 +9,44 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  id-token: write
 
 jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Reuse verified CI
+        id: verified
+        uses: aimuzov/infra-ci/reuse-check@v1
+        continue-on-error: true
+        with:
+          workflow: .github/workflows/deploy.yml
       - uses: actions/checkout@v7
-      - run: shellcheck -x -P SCRIPTDIR deploy/remote.sh deploy/site.sh deploy/site-build.sh vpn/update.sh shell/install.sh shell/bashrc shell/tests/install.sh
+        if: steps.verified.outputs.reused != 'true'
+      - run:
+          shellcheck -x -P SCRIPTDIR deploy/remote.sh deploy/site.sh deploy/site-build.sh vpn/update.sh shell/install.sh
+          shell/bashrc shell/tests/install.sh
+        if: steps.verified.outputs.reused != 'true'
       - run: python3 -m unittest discover -s deploy/tests
+        if: steps.verified.outputs.reused != 'true'
       - name: Install server shell twice on clean Debian
         run: docker run --rm --platform linux/amd64 -v "$PWD:/repo:ro" -w /repo debian:13-slim bash shell/tests/install.sh
+        if: steps.verified.outputs.reused != 'true'
       # Тот же образ, что в compose.yml, чтобы сломанный конфиг не доехал до сервера.
       # Хеш одноразовый: настоящий секрет живёт только в .env на сервере.
       - run: >-
-          docker run --rm
-          -v "$PWD/Caddyfile:/etc/caddy/Caddyfile:ro"
-          -v "$PWD/sites:/etc/caddy/sites:ro"
-          caddy:2.11-alpine sh -c
-          'TAPLIST_EDITOR_HASH="$(caddy hash-password --plaintext ci)"
-          REABICA_AUTH_USER=ci
-          REABICA_AUTH_HASH="$(caddy hash-password --plaintext ci)"
-          caddy validate --config /etc/caddy/Caddyfile'
+          docker run --rm -v "$PWD/Caddyfile:/etc/caddy/Caddyfile:ro" -v "$PWD/sites:/etc/caddy/sites:ro"
+          caddy:2.11-alpine sh -c 'TAPLIST_EDITOR_HASH="$(caddy hash-password --plaintext ci)" REABICA_AUTH_USER=ci
+          REABICA_AUTH_HASH="$(caddy hash-password --plaintext ci)" caddy validate --config /etc/caddy/Caddyfile'
+        if: steps.verified.outputs.reused != 'true'
+      - name: Record verified CI
+        if: github.event_name == 'pull_request' && steps.verified.outputs.reused != 'true'
+        uses: aimuzov/infra-ci/record-check@v1
+        continue-on-error: true
+        with:
+          workflow: .github/workflows/deploy.yml
 
   deploy:
     needs: check
@@ -48,7 +64,7 @@ jobs:
       - name: Deploy on server
         env:
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          KNOWN_HOST: '141.133.188.169 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINnRXayyFSNqYxBbGbHCh60Y6jUyhLT47gwSeoqQRvsd'
+          KNOWN_HOST: "141.133.188.169 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINnRXayyFSNqYxBbGbHCh60Y6jUyhLT47gwSeoqQRvsd"
         run: |
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy
