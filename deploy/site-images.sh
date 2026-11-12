@@ -173,8 +173,8 @@ site_image_health() {
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
 		paralpac)
-			local attempt
-			for attempt in {1..7}; do
+			local _attempt
+			for _attempt in {1..7}; do
 				if docker exec -i paralpac node --input-type=module \
 					< "$(dirname "${BASH_SOURCE[0]}")/paralpac-health.mjs" >/dev/null 2>&1; then return 0; fi
 				sleep 3
