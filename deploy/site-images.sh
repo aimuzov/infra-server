@@ -173,17 +173,10 @@ site_image_health() {
 		peeshet) urls=(https://peeshet.aimuzov.online/health) ;;
 		skator) urls=(https://skator.ru/robots.txt) ;;
 		paralpac)
-			local attempt
-			for attempt in {1..7}; do
-				if docker exec paralpac node --input-type=module -e '
-					const user = process.env.CHATMELD_USER || "admin";
-					const password = process.env.CHATMELD_PASSWORD;
-					if (!password) process.exit(1);
-					const url = "http://127.0.0.1:" + (process.env.CHATMELD_PORT || "4321") + "/api/state";
-					const authorization = "Basic " + Buffer.from(user + ":" + password).toString("base64");
-					const response = await fetch(url, { headers: { authorization }, signal: AbortSignal.timeout(5000) });
-					if (!response.ok || (await response.json()).role !== "owner") process.exit(1);
-				' >/dev/null 2>&1; then return 0; fi
+			local _attempt
+			for _attempt in {1..7}; do
+				if docker exec -i paralpac node --input-type=module \
+					< "$(dirname "${BASH_SOURCE[0]}")/paralpac-health.mjs" >/dev/null 2>&1; then return 0; fi
 				sleep 3
 			done
 			echo 'Paralpac authenticated health check failed' >&2
