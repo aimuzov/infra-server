@@ -31,6 +31,13 @@ docs.reabica.ru {
 app.reabica.ru {
 	import common
 
+	@mcp path /mcp /mcp/* /authorize /authorize/* /token /register /revoke /error /.well-known/oauth-authorization-server /.well-known/oauth-protected-resource /.well-known/oauth-protected-resource/mcp
+	handle @mcp {
+		reverse_proxy reabica-app-mcp:8080 {
+			flush_interval -1
+		}
+	}
+
 	handle /api/* {
 		reverse_proxy reabica-app-api:8080
 	}
