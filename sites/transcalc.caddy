@@ -1,0 +1,6 @@
+# Транскальк, репо aimuzov/transcalc, на сервере /srv/transcalc.
+
+transcalc.aimuzov.online {
+	import common
+	reverse_proxy transcalc:80
+}
