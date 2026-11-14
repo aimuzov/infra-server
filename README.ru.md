@@ -251,3 +251,5 @@ sudo bash /srv/infra-server/shell/install.sh
 ## Лицензия
 
 [MIT](LICENSE)
+
+Для production-контейнеров обязательны лимиты RAM и swap. Правила выбора и проверки -- в [общей политике](docs/resource-limits.md).

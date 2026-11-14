@@ -31,6 +31,13 @@ jobs:
         if: steps.verified.outputs.reused != 'true'
       - run: python3 -m unittest discover -s deploy/tests
         if: steps.verified.outputs.reused != 'true'
+      - name: Check production memory budgets
+        if: steps.verified.outputs.reused != 'true'
+        env:
+          TAPLIST_EDITOR_HASH: ci
+          REABICA_AUTH_USER: ci
+          REABICA_AUTH_HASH: ci
+        run: docker compose -f compose.yml config --format json | python3 deploy/check-memory-limits.py
       - name: Install server shell twice on clean Debian
         run: docker run --rm --platform linux/amd64 -v "$PWD:/repo:ro" -w /repo debian:13-slim bash shell/tests/install.sh
         if: steps.verified.outputs.reused != 'true'
