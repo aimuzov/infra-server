@@ -8,6 +8,8 @@ services:
   caddy:
     image: caddy:2.11-alpine
     container_name: caddy
+    mem_limit: 256m
+    memswap_limit: 320m
     restart: unless-stopped
     # Хеши паролей для sites/*.caddy ({$VAR}). Передаём поштучно, чтобы остальной .env
     # в Caddy не попадал. Без хеша ":?" роняет compose и продолжает работать старый Caddy,
@@ -38,6 +40,8 @@ services:
   vpn:
     image: ghcr.io/xtls/xray-core:26.10.21
     container_name: vpn
+    mem_limit: 128m
+    memswap_limit: 160m
     restart: unless-stopped
     command: ['run', '-c', '/etc/xray/config.json']
     volumes:

@@ -251,3 +251,5 @@ Debian container and checks the integrations, Bash preservation, and repeated in
 ## License
 
 [MIT](LICENSE)
+
+Production memory budgets are mandatory. See [the shared policy](docs/resource-limits.md) for sizing, validation and migration of existing services.
