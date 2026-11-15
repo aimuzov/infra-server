@@ -33,6 +33,27 @@ class SubscriptionStoreTests(unittest.TestCase):
         self.assertEqual(self.target.stat().st_mode & 0o777, 0o600)
         self.assertEqual(other.read_text(), "OTHER=keep\n")
 
+
+    def test_exact_workflow_producer_round_trips_through_store(self):
+        workflow = (ROOT / ".github/workflows/deploy.yml").read_text()
+        producer = next(
+            line.strip().removesuffix("|").rstrip()
+            for line in workflow.splitlines()
+            if line.strip().startswith("python3 -c ")
+        )
+        url = "https://example.test/sub?value=$(touch%20no)&q='"
+        result = subprocess.run(
+            ["bash", "-o", "pipefail", "-c", producer],
+            env=dict(os.environ, VPN_SUBSCRIPTION_URL=url),
+            capture_output=True, text=True, check=True,
+        )
+        self.save(result.stdout)
+        stored = subprocess.run(
+            ["bash", "-c", 'source "$1"; printf %s "$VPN_SUBSCRIPTION_URL"', "_", str(self.target)],
+            capture_output=True, text=True, check=True,
+        )
+        self.assertEqual(stored.stdout, url)
+
     def test_bad_payload_preserves_existing_secret(self):
         for payload in ['{}', '{"vpn_subscription_url":"http://example.test"}', '{"vpn_subscription_url":"https://a.test/\\nX=bad"}', 'not json']:
             with self.subTest(payload=payload):
