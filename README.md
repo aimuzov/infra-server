@@ -121,8 +121,9 @@ Its private half is the `DEPLOY_SSH_KEY` repository secret.
 
 ## Secrets
 
-Nothing secret is committed. Secrets live in `/srv/infra-server/.env` (template:
-[`.env.example`](.env.example)):
+VPN_SUBSCRIPTION_URL is a GitHub Actions repository secret. Deploy sends it as JSON over SSH stdin and stores it in vpn/subscription.env with mode 0600. Other server secrets stay in .env. The daily timer reads the saved VPN secret.
+
+[`.env.example`](.env.example) lists the server variables:
 
 | Variable                                 | Used by                                                                                       |
 | ---------------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -209,8 +210,9 @@ networks:
     external: true
 ```
 
-`vpn/update.sh` rebuilds the config on every deploy and once a day via `vpn-update.timer`. Check
-from the server:
+The updater requires exactly one aggregate profile and validates it with Xray before replacement. Changed configs recreate the VPN container; a failed recreation restores the previous file.
+
+`vpn/update.sh` runs on every deploy and once a day via `vpn-update.timer`. Check from the server:
 
 ```bash
 docker run --rm --network vpn curlimages/curl -sx http://vpn:3128 https://www.cloudflare.com/cdn-cgi/trace
