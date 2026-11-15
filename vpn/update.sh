@@ -7,6 +7,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")"
+umask 077
 
 allow_stale=false
 if [[ $# == 1 && $1 == --allow-stale ]]; then
@@ -18,10 +19,12 @@ fi
 
 # shellcheck source=/dev/null
 [[ -f ../.env ]] && source ../.env
-: "${VPN_SUBSCRIPTION_URL:?VPN_SUBSCRIPTION_URL is not set, see .env.example}"
+# shellcheck source=/dev/null
+[[ -f subscription.env ]] && source subscription.env
+: "${VPN_SUBSCRIPTION_URL:?VPN_SUBSCRIPTION_URL is not set}"
 
-exec 9>.update.lock
-flock 9
+exec 8>/tmp/infra-vpn-update.lock
+flock 8
 sub=$(mktemp)
 next=$(mktemp)
 previous=$(mktemp)
@@ -75,7 +78,7 @@ if cmp -s "$next" config.json; then
 	echo 'vpn: config unchanged and validated'
 	exit 0
 fi
-if ! running_services=$(docker compose ps --status running --services); then
+if ! existing=$(docker compose ps --all --quiet vpn); then
 	update_failed 'cannot inspect VPN container state'
 fi
 
@@ -87,17 +90,17 @@ fi
 install -m 644 "$next" "$staged"
 mv -f "$staged" config.json
 
-if grep -qx vpn <<<"$running_services" && ! docker compose restart vpn; then
+if [[ -n $existing ]] && ! docker compose up -d --no-deps --force-recreate vpn; then
 	if $had_previous; then
 		install -m 644 "$previous" "$staged"
 		mv -f "$staged" config.json
-		if ! docker compose restart vpn; then
-			echo 'vpn: restart and rollback restart both failed' >&2
+		if ! docker compose up -d --no-deps --force-recreate vpn; then
+			echo 'vpn: container recreation and rollback both failed' >&2
 			exit 1
 		fi
-		update_failed 'restart failed; previous VPN config was restored'
+		update_failed 'container recreation failed; previous VPN config was restored'
 	fi
-	echo 'vpn: restart failed and no previous config exists' >&2
+	echo 'vpn: container recreation failed and no previous config exists' >&2
 	exit 1
 fi
 echo "vpn: config updated and validated ($(jq '[.outbounds[] | select(.protocol == "vless")] | length' config.json) nodes)"

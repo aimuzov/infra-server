@@ -1,6 +1,7 @@
 .env
 vpn/config.json
 .DS_Store
-
-vpn/.update.lock
+vpn/subscription.env
+vpn/.subscription-*
+vpn/.config-*
 vpn/.config.??????

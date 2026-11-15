@@ -39,7 +39,7 @@ if 'run' in a:
   c=json.loads(pathlib.Path(path).read_text())
   if c.get('reject'): sys.exit(1)
  except (ValueError,FileNotFoundError): sys.exit(1)
-if 'restart' in a and os.environ.get('FAIL_RESTART')=='1':
+if 'up' in a and os.environ.get('FAIL_RESTART')=='1':
  marker=log.with_suffix('.failed')
  if not marker.exists(): marker.touch();sys.exit(1)
 """)
@@ -62,7 +62,7 @@ if 'restart' in a and os.environ.get('FAIL_RESTART')=='1':
         return {**self.old, "remarks": "Всё и сразу", "meta": {"secret": "private"}, **extra}
 
     def restarts(self):
-        return sum("restart" in json.loads(line) for line in self.log.read_text().splitlines()) if self.log.exists() else 0
+        return sum("up" in json.loads(line) for line in self.log.read_text().splitlines()) if self.log.exists() else 0
 
     def test_validates_and_installs_fresh_profile_before_restart(self):
         self.assertEqual(self.run_update([self.profile()]).returncode, 0)
@@ -72,7 +72,7 @@ if 'restart' in a and os.environ.get('FAIL_RESTART')=='1':
         self.assertEqual(config["inbounds"][0]["listen"], "0.0.0.0")
         self.assertEqual(self.restarts(), 1)
         commands = [json.loads(line) for line in self.log.read_text().splitlines()]
-        self.assertLess(next(i for i,c in enumerate(commands) if "run" in c), next(i for i,c in enumerate(commands) if "restart" in c))
+        self.assertLess(next(i for i,c in enumerate(commands) if "run" in c), next(i for i,c in enumerate(commands) if "up" in c))
 
     def test_empty_subscription_is_an_error_for_the_timer(self):
         self.assertNotEqual(self.run_update([]).returncode, 0)

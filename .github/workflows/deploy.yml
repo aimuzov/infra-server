@@ -70,6 +70,7 @@ jobs:
       # поэтому команду в ssh не передаём.
       - name: Deploy on server
         env:
+          VPN_SUBSCRIPTION_URL: ${{ secrets.VPN_SUBSCRIPTION_URL }}
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           KNOWN_HOST: "141.133.188.169 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINnRXayyFSNqYxBbGbHCh60Y6jUyhLT47gwSeoqQRvsd"
         run: |
@@ -77,4 +78,5 @@ jobs:
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy
           chmod 600 ~/.ssh/deploy
           printf '%s\n' "$KNOWN_HOST" > ~/.ssh/known_hosts
-          ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes -o BatchMode=yes root@141.133.188.169
+          python3 -c 'import json, os; print(json.dumps({"vpn_subscription_url": os.environ["VPN_SUBSCRIPTION_URL"]}))' |
+            ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes -o BatchMode=yes root@141.133.188.169

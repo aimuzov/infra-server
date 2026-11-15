@@ -15,6 +15,7 @@ set -euo pipefail
 	git pull --ff-only --quiet
 	git log -1 --oneline
 
+	python3 vpn/store-subscription.py
 	vpn/update.sh --allow-stale
 	systemctl link --quiet /srv/infra-server/vpn/vpn-update.service /srv/infra-server/vpn/vpn-update.timer
 	systemctl link --quiet /srv/infra-server/docker/docker-prune.service /srv/infra-server/docker/docker-prune.timer
