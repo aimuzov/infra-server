@@ -45,7 +45,12 @@ services:
     restart: unless-stopped
     command: ['run', '-c', '/etc/xray/config.json']
     volumes:
-      - ./vpn/config.json:/etc/xray/config.json:ro
+      - type: bind
+        source: ./vpn/config.json
+        target: /etc/xray/config.json
+        read_only: true
+        bind:
+          create_host_path: false
     networks:
       - vpn
     logging:

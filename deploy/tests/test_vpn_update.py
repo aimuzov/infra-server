@@ -115,3 +115,14 @@ if 'up' in a and os.environ.get('FAIL_RESTART')=='1':
         self.assertNotEqual(self.run_update([self.profile()]).returncode, 0)
         self.assertEqual(self.config.read_bytes(), self.before)
         self.assertEqual(self.restarts(), 2)
+
+    def test_failed_first_install_can_retry_the_same_subscription(self):
+        self.config.unlink()
+        self.env["FAIL_RESTART"] = "1"
+        result = self.run_update([self.profile()])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(self.config.exists())
+        result = self.run_update([self.profile()])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.restarts(), 2)
+        self.assertEqual(json.loads(self.config.read_text())["inbounds"][0]["port"], 3128)
