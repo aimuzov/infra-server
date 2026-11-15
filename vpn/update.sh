@@ -100,6 +100,7 @@ if [[ -n $existing ]] && ! docker compose up -d --no-deps --force-recreate vpn; 
 		fi
 		update_failed 'container recreation failed; previous VPN config was restored'
 	fi
+	rm -f config.json
 	echo 'vpn: container recreation failed and no previous config exists' >&2
 	exit 1
 fi
