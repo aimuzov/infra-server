@@ -4,3 +4,4 @@ vpn/config.json
 vpn/subscription.env
 vpn/.subscription-*
 vpn/.config-*
+vpn/.config.??????

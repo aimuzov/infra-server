@@ -255,3 +255,7 @@ Debian container and checks the integrations, Bash preservation, and repeated in
 [MIT](LICENSE)
 
 Production memory budgets are mandatory. See [the shared policy](docs/resource-limits.md) for sizing, validation and migration of existing services.
+
+During deployment, vpn/update.sh --allow-stale can reuse the existing config only after Xray validates it. The workflow warns about the failed refresh and continues. The daily timer stays strict. A missing or invalid cache blocks deployment.
+
+Fresh configs are validated before atomic installation. A failed restart restores and restarts the previous config.

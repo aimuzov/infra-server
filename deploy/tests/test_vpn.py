@@ -83,7 +83,7 @@ class VpnUpdateTests(unittest.TestCase):
         self.bin.mkdir()
         self.calls = self.root / "calls"
         self.fixture = self.root / "subscription.json"
-        self.fixture.write_text(json.dumps([{"remarks": "EU Всё и сразу", "inbounds": [{"tag": "http"}, {"tag": "socks"}], "outbounds": [{"protocol": "vless"}]}]))
+        self.fixture.write_text(json.dumps([{"remarks": "EU Всё и сразу", "inbounds": [{"tag": "http", "protocol": "http"}, {"tag": "socks", "protocol": "socks"}], "outbounds": [{"protocol": "vless"}]}]))
         self.script("flock", "exit 0")
         self.script("curl", 'if [[ ${DOWNLOAD_STATUS:-0} != 0 ]]; then echo secret-diagnostic >&2; exit 22; fi; while [[ $# -gt 0 ]]; do if [[ $1 == -o ]]; then cp "$FIXTURE" "$2"; exit; fi; shift; done')
         self.script("docker", 'echo "$*" >> "$CALLS"; if [[ $* == *"run -test"* ]]; then exit "${VALIDATE_STATUS:-0}"; fi; if [[ $* == *"ps --all"* ]]; then [[ ${PS_STATUS:-0} == 0 ]] || exit 1; echo vpn-container; fi; if [[ $* == *"up -d"* ]]; then exit "${RECREATE_STATUS:-0}"; fi')
@@ -132,7 +132,8 @@ class VpnUpdateTests(unittest.TestCase):
         self.calls.write_text("")
         result = self.run_update()
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(self.calls.read_text(), "")
+        self.assertIn("run -test", self.calls.read_text())
+        self.assertNotIn("up -d", self.calls.read_text())
 
     def test_saved_subscription_overrides_legacy_env(self):
         (self.root / ".env").write_text("VPN_SUBSCRIPTION_URL=https://legacy.test/sub\nOTHER=keep\n")
